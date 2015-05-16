@@ -1,0 +1,29 @@
+package com.example.test;
+
+public class ActivityStorage
+{
+   public static void saveAction(String action, String contact, String message)
+   {
+      SharedPreferences pSharedPref = getApplicationContext().getSharedPreference(Context.MODE_PRIVATE);
+      if(pSharedPref != null)
+      {
+         JSONArray jsonArray = new JSONArray();
+         JSONObject jsonObject = new JSONObject();
+         jsonObject.put(contact, message);
+         Editor editor = pSharedPref.edit();
+         editor.remove(action).commit();
+         editor.putString(action, jsonObject.toString()).commit();
+      }
+   }
+
+   public static JSONObject loadAction(String action){
+      Map<String,String> outputMap = new HashMap<String,String>();
+      SharedPreferences pSharedPref = getApplicationContext().getSharedPreference(Context.MODE_PRIVATE);
+      JSONObject jsonObject = new JSONObject();
+         if (pSharedPref != null){       
+            String jsonString = pSharedPref.getString(action, (new JSONObject()).toString());
+            jsonObject = new JSONObject(jsonString);
+      }
+      return jsonObject;
+   }
+}
